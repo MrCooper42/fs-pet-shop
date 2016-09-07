@@ -90,7 +90,7 @@ if (cmd === 'read') {
       // console.log(pets);
     });
   });
-} else if (cmd === 'remove') {
+} else if (cmd === 'delete') {
   fs.readFile(petsPath, 'utf8', function(readErr, data) {
     var pets = JSON.parse(data)
     if (!index || index > pets.length || index < 0) {
@@ -99,6 +99,13 @@ if (cmd === 'read') {
     } else {
       pets.splice(index, 1);
       console.log("spliced @ " + "index: " + index, pets);
+      var petsJSON = JSON.stringify(pets);
+      fs.writeFile(petsPath, petsJSON, (destroyErr) => {
+        if (destroyErr) {
+          console.error(`Usage: ${node} ${file} ${cmd} INDEX`);
+          return
+        }
+      })
     }
   })
 } else {
