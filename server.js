@@ -26,17 +26,19 @@ app.get('/pets', (req, res) => {
   })
 })
 
-app.post('/pets', function(req, res) {
-  fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
-    if (readErr) {
-      console.error(readErr.stack);
+app.post('/pets', (req, res) => {
+  fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
+    if (err) {
+      console.error(err.stack);
       return res.sendStatus(500);
     }
 
     var pets = JSON.parse(petsJSON);
-    var pet = req.body.name;
+    var AGE = req.body.age;
+    var KIND = req.body.kind;
+    var NAME = req.body.name;
 
-    if (!pet) {
+    if (!AGE && KIND && NAME) {
       return res.sendStatus(400);
     }
 
