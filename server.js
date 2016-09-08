@@ -13,12 +13,18 @@ const bodyParser = require('body-parser');
 
 app.use(morgan('short'));
 app.use(bodyParser.json());
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  return res.send(500, {
+    message: err.message
+  });
+});
 
 app.get('/pets', (req, res) => {
   fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
     if (err) {
       console.error('error', err.stack)
-      return res.sendStatus(500)
+      return next(err)
     }
     let pets = JSON.parse(petsJSON)
     res.set("Content-Type", "text/plain");
@@ -30,7 +36,7 @@ app.post('/pets', (req, res) => {
   fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
     if (err) {
       console.error(err.stack);
-      return res.sendStatus(500);
+      return next(err);
     }
 
     var pets = JSON.parse(petsJSON);
