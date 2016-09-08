@@ -27,7 +27,7 @@ app.get('/pets', (req, res) => {
 })
 
 app.post('/pets', (req, res) => {
-  fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
     if (err) {
       console.error(err.stack);
       return res.sendStatus(500);
@@ -50,7 +50,7 @@ app.post('/pets', (req, res) => {
 
     var petsJSON = JSON.stringify(pets);
 
-    fs.writeFile(petsPath, petsJSON, function(err) {
+    fs.writeFile(petsPath, petsJSON, (err) => {
       if (err) {
         console.error(err.stack);
         return res.sendStatus(500);
