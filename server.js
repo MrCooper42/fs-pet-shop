@@ -59,7 +59,7 @@ app.post('/pets', (req, res) => {
     fs.writeFile(petsPath, petsJSON, (err) => {
       if (err) {
         console.error(err.stack);
-        return res.sendStatus(500);
+        return next(err)
       }
 
       res.set('Content-Type', 'text/plain');
@@ -72,7 +72,7 @@ app.get('/pets/:id', (req, res) => {
   fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
     if (err) {
       console.error('errors', err.stack);
-      return res.sendStatus(500);
+      return next(err);
     }
 
     let id = Number.parseInt(req.params.id);
