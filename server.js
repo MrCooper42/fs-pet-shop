@@ -8,8 +8,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
 
-const morgan = requre('morgan')
-const bodyParser = requre('body-parser');
+const morgan = require('morgan')
+const bodyParser = require('body-parser');
 
 app.use(morgan('short'));
 app.use(bodyParser.json());
@@ -38,22 +38,26 @@ app.post('/pets', (req, res) => {
     var KIND = req.body.kind;
     var NAME = req.body.name;
 
-    if (!AGE && KIND && NAME) {
+    if (!NAME) {
       return res.sendStatus(400);
     }
 
-    pets.push(pet);
+    pets.push({
+      age: parseInt(AGE),
+      kind: KIND,
+      name: NAME
+    });
 
-    var newpetsJSON = JSON.stringify(pets);
+    var petsJSON = JSON.stringify(pets);
 
-    fs.writeFile(petsPath, newpetsJSON, function(writeErr) {
-      if (writeErr) {
-        console.error(writeErr.stack);
+    fs.writeFile(petsPath, petsJSON, function(err) {
+      if (err) {
+        console.error(err.stack);
         return res.sendStatus(500);
       }
 
       res.set('Content-Type', 'text/plain');
-      res.send(pet);
+      res.send(pets);
     });
   });
 });
