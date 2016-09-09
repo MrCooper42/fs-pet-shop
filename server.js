@@ -39,10 +39,10 @@ app.post('/pets', (req, res) => {
       return next(err);
     }
 
-    var pets = JSON.parse(petsJSON);
-    var AGE = req.body.age;
-    var KIND = req.body.kind;
-    var NAME = req.body.name;
+    let pets = JSON.parse(petsJSON);
+    let AGE = req.body.age;
+    let KIND = req.body.kind;
+    let NAME = req.body.name;
 
     if (!NAME) {
       return res.sendStatus(400);
@@ -54,7 +54,7 @@ app.post('/pets', (req, res) => {
       name: NAME
     });
 
-    var petsJSON = JSON.stringify(pets);
+    let petsJSON = JSON.stringify(pets);
 
     fs.writeFile(petsPath, petsJSON, (err) => {
       if (err) {

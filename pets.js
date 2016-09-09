@@ -90,7 +90,7 @@ if (cmd === 'read') {
       // console.log(pets);
     });
   });
-} else if (cmd === 'remove') {
+} else if (cmd === 'delete') {
   fs.readFile(petsPath, 'utf8', (readErr, data) => {
     let pets = JSON.parse(data)
     if (!index || index > pets.length || index < 0) {
@@ -100,8 +100,8 @@ if (cmd === 'read') {
       pets.splice(index, 1);
       console.log("spliced @ " + "index: " + index, pets);
       let petsJSON = JSON.stringify(pets);
-      fs.writeFile(petsPath, petsJSON, (destroyErr) => {
-        if (destroyErr) {
+      fs.writeFile(petsPath, petsJSON, (deleteErr) => {
+        if (deleteErr) {
           console.error(`Usage: ${node} ${file} ${cmd} INDEX`);
           return
         }

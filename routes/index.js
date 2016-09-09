@@ -1,9 +1,15 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
+
+const express = require('express');
+const router = express.Router();
+
+const serverExpress = require('./serverExpress')
+
+router.use('/pets', serverExpress)
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', (req, res, next) => {
+  res.send('this is the index!')
 });
 
 module.exports = router;
