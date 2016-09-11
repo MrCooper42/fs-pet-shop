@@ -58,11 +58,11 @@ router.post('/', (req, res) => {
     }
 
     let pets = JSON.parse(petsJSON);
-    let AGE = req.body.age;
+    let AGE = Number.parseInt(req.body.age);
     let KIND = req.body.kind;
     let NAME = req.body.name;
 
-    if (!NAME || !KIND || !AGE) {
+    if (!NAME || !KIND || !AGE || Number.isNaN(AGE)) {
       return res.sendStatus(400);
     }
 
@@ -93,11 +93,8 @@ router.put('/:id', (req, res) => {
     }
 
     let pets = JSON.parse(data);
-    console.log(pets);
     let id = parseInt(req.params.id);
-    console.log(id);
-    let AGE = parseInt(req.body.age);
-    console.log(AGE);
+    let AGE = Number.parseInt(req.body.age);
     let KIND = req.body.kind;
     let NAME = req.body.name;
 
@@ -127,5 +124,64 @@ router.put('/:id', (req, res) => {
     });
   });
 });
+
+router.patch('/:id', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (err, data) => {
+    if (err) {
+      return next(err);
+    }
+
+    let pets = JSON.parse(data);
+    let id = parseInt(req.params.id);
+    let AGE = Number.parseInt(req.body.age);
+    let KIND = req.body.kind;
+    let NAME = req.body.name;
+
+    if (!NAME && !KIND && !AGE) {
+      return res.sendStatus(400);
+    }
+    if (AGE) {
+      console.log(AGE);
+      pets[id].age = AGE;
+    }
+    if (KIND) {
+      pets[id].kind = KIND;
+    }
+    if (NAME) {
+      pets[id].name = NAME;
+    }
+
+    console.log(pets);
+
+    let petsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, petsJSON, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.send(petsJSON);
+    });
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (readErr, data) => {
+    let pets = JSON.parse(data)
+    let id = parseInt(req.params.id);
+    if (!id || id > pets.length || id < 0) {
+      return next(err)
+    } else {
+      pets.splice(id, 1);
+      console.log("spliced @ " + "id: " + id, pets);
+      let petsJSON = JSON.stringify(pets);
+      fs.writeFile(petsPath, petsJSON, (deleteErr) => {
+        if (deleteErr) {
+          return next(err);
+        }
+        res.send(petsJSON);
+      })
+    }
+  })
+})
 
 module.exports = router;
