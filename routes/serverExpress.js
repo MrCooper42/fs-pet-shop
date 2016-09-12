@@ -5,9 +5,12 @@ const path = require('path')
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const auth = require('./auth');
+
 
 const router = express.Router();
-const petsPath = path.join(__dirname, "pets.json")
+const petsPath = path.join(__dirname, "pets.json");
+
 
 router.use(morgan('short'));
 router.use(bodyParser.json());
@@ -18,6 +21,7 @@ router.use((err, req, res, next) => {
   });
 });
 
+router.use(auth);
 
 router.get('/', (req, res) => {
   fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
